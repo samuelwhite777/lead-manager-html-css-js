@@ -14,11 +14,22 @@
             font-family: 'Inter', sans-serif;
             @apply bg-slate-50 text-slate-700; 
         }
-        .chart-container { /* Placeholder style, will be used later */
-            position: relative; width: 100%; max-width: 600px; margin-left: auto; margin-right: auto;
-            height: 320px; max-height: 400px;
+        .chart-container {
+            position: relative; width: 100%; max-width: 500px; /* Reduzido para melhor encaixe lado a lado */
+            margin-left: auto; margin-right: auto;
+            height: 300px; /* Altura base */
+            max-height: 350px;
         }
-        @media (min-width: 768px) { .chart-container { height: 350px; } }
+        @media (min-width: 768px) { /* md */
+            .chart-container { 
+                height: 320px; /* Ajuste para telas médias */
+            }
+        }
+        @media (min-width: 1024px) { /* lg */
+             .chart-container { 
+                height: 350px; /* Altura para telas grandes */
+             }
+        }
         
         #app-header {
             height: 4.5rem; /* 72px */
@@ -86,7 +97,6 @@
         .button-secondary {
             @apply bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 transition-all duration-200 ease-in-out focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500;
         }
-        /* Styles for elements that might be added later, or are part of basic structure but not yet fully functional */
         .status-badge { padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase;}
         .table-header { @apply bg-slate-50; }
         .table-cell-muted { @apply text-slate-500; }
@@ -167,15 +177,21 @@
         <main id="main-content" class="flex-1 p-4 md:p-8 overflow-y-auto">
             <div id="view-dashboard" class="card">
                 <h2 class="text-3xl font-bold text-slate-800 mb-2">Dashboard</h2>
-                <p class="text-slate-500 mb-8">Visão geral da performance dos seus leads. (Conteúdo a ser implementado nos próximos commits)</p>
+                <p class="text-slate-500 mb-8">Visão geral da performance dos seus leads.</p>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                    <div class="card"><h3 class="text-sm font-medium text-slate-500">Total de Leads</h3><p id="kpi-total-leads" class="text-3xl font-bold text-slate-800 mt-2">--</p></div>
-                    <div class="card"><h3 class="text-sm font-medium text-slate-500">Leads Novos</h3><p id="kpi-new-leads" class="text-3xl font-bold text-slate-800 mt-2">--</p></div>
-                    <div class="card"><h3 class="text-sm font-medium text-slate-500">Taxa de Conversão</h3><p id="kpi-conversion-rate" class="text-3xl font-bold text-slate-800 mt-2">--%</p></div>
+                    <div class="card"><h3 class="text-sm font-medium text-slate-500">Total de Leads</h3><p id="kpi-total-leads" class="text-3xl font-bold text-slate-800 mt-2">0</p></div>
+                    <div class="card"><h3 class="text-sm font-medium text-slate-500">Leads Novos</h3><p id="kpi-new-leads" class="text-3xl font-bold text-slate-800 mt-2">0</p></div>
+                    <div class="card"><h3 class="text-sm font-medium text-slate-500">Taxa de Conversão</h3><p id="kpi-conversion-rate" class="text-3xl font-bold text-slate-800 mt-2">0%</p></div>
                 </div>
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <div class="card"><h3 class="text-lg font-semibold text-slate-800 mb-4">Leads por Status</h3><div class="chart-container bg-slate-100 flex items-center justify-center text-slate-400">Gráfico aqui</div></div>
-                    <div class="card"><h3 class="text-lg font-semibold text-slate-800 mb-4">Leads por Campanha</h3><div class="chart-container bg-slate-100 flex items-center justify-center text-slate-400">Gráfico aqui</div></div>
+                    <div class="card">
+                        <h3 class="text-lg font-semibold text-slate-800 mb-4">Leads por Status</h3>
+                        <div class="chart-container"><canvas id="statusChart"></canvas></div>
+                    </div>
+                    <div class="card">
+                        <h3 class="text-lg font-semibold text-slate-800 mb-4">Leads por Campanha</h3>
+                        <div class="chart-container"><canvas id="campaignChart"></canvas></div>
+                    </div>
                 </div>
             </div>
 
@@ -288,11 +304,14 @@
             const mockLeads = [ 
                 { id: 1, facebook_lead_id: '1001', created_time: '2025-05-30T10:00:00Z', ad_name: 'Anúncio Lookalike', campaign_name: 'Campanha Verão 2025', form_name: 'Form Contato Rápido', full_name: 'Ana Silva', email: 'ana.silva@example.com', phone_number: '11987654321', status: 'novo', source: 'api_facebook', notes: '' },
                 { id: 2, facebook_lead_id: '1002', created_time: '2025-05-30T11:20:00Z', ad_name: 'Anúncio Remarketing', campaign_name: 'Campanha Inverno 2025', form_name: 'Form Baixar Ebook', full_name: 'Bruno Costa', email: 'bruno.costa@example.com', phone_number: '21912345678', status: 'contatado', source: 'api_facebook', notes: 'Ligação realizada.' },
+                { id: 3, facebook_lead_id: '1003', created_time: '2025-05-29T15:00:00Z', ad_name: 'Anúncio Lookalike', campaign_name: 'Campanha Verão 2025', form_name: 'Form Contato Rápido', full_name: 'Carla Dias', email: 'carla.dias@example.com', phone_number: '31988887777', status: 'qualificado', source: 'upload_csv', notes: 'Demonstrou forte interesse no produto X.' },
+                { id: 4, facebook_lead_id: '1004', created_time: '2025-05-29T18:45:00Z', ad_name: 'Anúncio Público Aberto', campaign_name: 'Campanha Institucional', form_name: 'Form Newsletter', full_name: 'Daniel Martins', email: 'daniel.martins@example.com', phone_number: '41999998888', status: 'convertido', source: 'upload_xlsx', notes: 'Assinou o plano premium.' },
+                { id: 5, facebook_lead_id: '1005', created_time: '2025-05-28T09:10:00Z', ad_name: 'Anúncio Remarketing', campaign_name: 'Campanha Inverno 2025', form_name: 'Form Baixar Ebook', full_name: 'Eduarda Fernandes', email: 'eduarda.f@example.com', phone_number: '51977776666', status: 'perdido', source: 'api_facebook', notes: 'Optou pelo concorrente.' },
             ];
             
             let isMobileMenuOpen = false;
-            let currentLeadId = null; // Will be used in later commits for modal
-            let statusChartInstance, campaignChartInstance; // For charts in later commits
+            let currentLeadId = null; 
+            let statusChartInstance, campaignChartInstance; 
 
             const views = { 
                 dashboard: document.getElementById('view-dashboard'),
@@ -307,8 +326,18 @@
             };
             
             const leadStatuses = ['novo', 'contatado', 'qualificado', 'convertido', 'perdido'];
-            // statusColors and statusBackgrounds will be used when table and charts are implemented
-
+            const statusColors = { 
+                novo: '#3b82f6', contatado: '#f97316', qualificado: '#8b5cf6',
+                convertido: '#16a34a', perdido: '#ef4444',
+            };
+             const statusBackgrounds = { 
+                novo: 'bg-blue-100 text-blue-800', 
+                contatado: 'bg-orange-100 text-orange-800',
+                qualificado: 'bg-purple-100 text-purple-800', 
+                convertido: 'bg-green-100 text-green-800',
+                perdido: 'bg-red-100 text-red-800',
+            };
+            
             const initializeSystem = () => {
                 appViewEl.classList.add('hidden');
                 authSectionEl.classList.remove('hidden');
@@ -388,7 +417,7 @@
                 const passwordInput = document.getElementById('reg-password');
                 const confirmPasswordInput = document.getElementById('reg-confirm-password');
                 
-                if (!passwordInput || !confirmPasswordInput) return; // Safety check
+                if (!passwordInput || !confirmPasswordInput) return; 
 
                 const password = passwordInput.value;
                 const confirmPassword = confirmPasswordInput.value;
@@ -446,7 +475,12 @@
                 });
             };
             
-            const updateAllVisuals = () => { updateKPIs(); /* createOrUpdateCharts(); renderLeadsTable(); */ };
+            const updateAllVisuals = () => { 
+                updateKPIs(); 
+                createOrUpdateCharts(); // Now this will be implemented
+                // renderLeadsTable(); // Will be implemented in next commit
+            };
+
             const updateKPIs = () => { 
                 const totalLeadsEl = document.getElementById('kpi-total-leads');
                 const newLeadsEl = document.getElementById('kpi-new-leads');
@@ -457,8 +491,74 @@
                 const converted = mockLeads.filter(l => l.status === 'convertido').length;
                 if(conversionRateEl) conversionRateEl.textContent = mockLeads.length > 0 ? `${((converted/mockLeads.length)*100).toFixed(1)}%` : '0%';
             };
-            // Placeholder functions to be fully implemented in later commits
-            const createOrUpdateCharts = () => { console.log("createOrUpdateCharts placeholder"); };
+            
+            const createOrUpdateCharts = () => {
+                const statusCtx = document.getElementById('statusChart').getContext('2d');
+                const campaignCtx = document.getElementById('campaignChart').getContext('2d');
+                const chartTextColor = '#475569'; 
+                const chartGridColor = 'rgba(203, 213, 225, 0.5)'; 
+                const doughnutBorderColor = '#ffffff'; 
+
+                Chart.defaults.color = chartTextColor;
+                
+                const statusCounts = leadStatuses.reduce((acc, status) => {
+                    acc[status] = mockLeads.filter(lead => lead.status === status).length; return acc;
+                }, {});
+                const campaignData = mockLeads.reduce((acc, lead) => {
+                    acc[lead.campaign_name] = (acc[lead.campaign_name] || 0) + 1; return acc;
+                }, {});
+
+                if (statusChartInstance) statusChartInstance.destroy();
+                statusChartInstance = new Chart(statusCtx, {
+                    type: 'doughnut',
+                    data: { 
+                        labels: leadStatuses.map(s => s.charAt(0).toUpperCase() + s.slice(1)),
+                        datasets: [{ 
+                            data: Object.values(statusCounts), 
+                            backgroundColor: leadStatuses.map(s => statusColors[s]), 
+                            borderColor: doughnutBorderColor, 
+                            borderWidth: 3, 
+                        }]
+                    }, 
+                    options: { 
+                        responsive: true, 
+                        maintainAspectRatio: false, 
+                        plugins: { 
+                            legend: { 
+                                position: 'bottom', 
+                                labels: { color: chartTextColor, padding: 20, font: {size: 12} } 
+                            } 
+                        } 
+                    }
+                });
+
+                if (campaignChartInstance) campaignChartInstance.destroy();
+                campaignChartInstance = new Chart(campaignCtx, {
+                    type: 'bar',
+                    data: { 
+                        labels: Object.keys(campaignData),
+                        datasets: [{ 
+                            label: 'Nº de Leads', 
+                            data: Object.values(campaignData), 
+                            backgroundColor: 'rgba(79, 70, 229, 0.7)', 
+                            borderColor: 'rgba(79, 70, 229, 1)', 
+                            borderWidth: 1, 
+                            borderRadius: 4 
+                        }] 
+                    }, 
+                    options: { 
+                        responsive: true, 
+                        maintainAspectRatio: false, 
+                        scales: { 
+                            y: { beginAtZero: true, ticks: { color: chartTextColor }, grid: { color: chartGridColor, drawBorder: false} },
+                            x: { ticks: { color: chartTextColor }, grid: { display: false, drawBorder: false} }
+                        }, 
+                        plugins: { legend: { display: false } } 
+                    }
+                });
+            };
+
+            // Placeholder functions for later commits
             const renderLeadsTable = () => { console.log("renderLeadsTable placeholder"); };
             const populateFilters = () => { console.log("populateFilters placeholder"); };
             const openModal = (leadId) => { 
