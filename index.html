@@ -15,46 +15,26 @@
             @apply bg-slate-50 text-slate-700; 
         }
         .chart-container {
-            position: relative; width: 100%; max-width: 500px; /* Reduzido para melhor encaixe lado a lado */
+            position: relative; width: 100%; max-width: 500px; 
             margin-left: auto; margin-right: auto;
-            height: 300px; /* Altura base */
+            height: 300px; 
             max-height: 350px;
         }
-        @media (min-width: 768px) { /* md */
-            .chart-container { 
-                height: 320px; /* Ajuste para telas médias */
-            }
-        }
-        @media (min-width: 1024px) { /* lg */
-             .chart-container { 
-                height: 350px; /* Altura para telas grandes */
-             }
-        }
+        @media (min-width: 768px) { .chart-container { height: 320px; } }
+        @media (min-width: 1024px) { .chart-container { height: 350px; } }
         
-        #app-header {
-            height: 4.5rem; /* 72px */
-        }
-        #main-content {
-            padding-top: 4.5rem; /* Match header height */
-        }
+        #app-header { height: 4.5rem; }
+        #main-content { padding-top: 4.5rem; }
 
         .nav-link {
             display: flex; align-items: center; padding: 0.5rem 0.75rem; border-radius: 0.375rem;
             transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out; 
             @apply text-slate-600 text-sm font-medium;
         }
-        .nav-link:hover { 
-            @apply bg-indigo-100 text-indigo-700;
-        }
-        .nav-link.active { 
-            @apply bg-indigo-600 text-white;
-        }
-        .nav-link.active:hover { 
-            @apply bg-indigo-700;
-        }
-        #mobile-menu .nav-link {
-            @apply px-4 py-3 w-full justify-start;
-        }
+        .nav-link:hover { @apply bg-indigo-100 text-indigo-700; }
+        .nav-link.active { @apply bg-indigo-600 text-white; }
+        .nav-link.active:hover { @apply bg-indigo-700; }
+        #mobile-menu .nav-link { @apply px-4 py-3 w-full justify-start; }
 
         .modal-backdrop {
             position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.6);
@@ -64,16 +44,15 @@
         .modal-content {
              @apply bg-white rounded-lg shadow-xl w-11/12 md:max-w-2xl transform transition-all duration-300 ease-in-out scale-95 opacity-0;
         }
-        .modal-backdrop:not(.hidden) .modal-content {
-            @apply scale-100 opacity-100;
+        .modal-backdrop:not(.hidden) .modal-content { @apply scale-100 opacity-100; }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem;
+            font-weight: 600; text-transform: uppercase;
         }
         
-        .auth-container { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1rem; 
-            @apply bg-slate-100;
-        }
-        .auth-card { 
-            @apply bg-white p-8 rounded-xl shadow-2xl border border-slate-200 w-full;
-        }
+        .auth-container { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 1rem; @apply bg-slate-100; }
+        .auth-card { @apply bg-white p-8 rounded-xl shadow-2xl border border-slate-200 w-full; }
         @media (min-width: 640px) { .auth-card { max-width: 28rem; } }
         
         .form-input {
@@ -81,23 +60,12 @@
             @apply border-slate-300 bg-white text-slate-900 placeholder-slate-400;
             transition: ring 0.2s ease-in-out, border-color 0.2s ease-in-out;
         }
-        .form-input:focus { 
-            outline: none; @apply ring-2 ring-indigo-500 border-indigo-500;
-        }
-        .form-label { display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.25rem; 
-            @apply text-slate-600;
-        }
-        .card {
-            @apply bg-white p-6 rounded-lg shadow-lg border border-slate-200;
-        }
+        .form-input:focus { outline: none; @apply ring-2 ring-indigo-500 border-indigo-500; }
+        .form-label { display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.25rem; @apply text-slate-600; }
+        .card { @apply bg-white p-6 rounded-lg shadow-lg border border-slate-200; }
         .text-primary-accent { @apply text-indigo-600; }
-        .button-primary { 
-            @apply bg-indigo-600 hover:bg-indigo-700 text-white transition-all duration-200 ease-in-out focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500;
-        }
-        .button-secondary {
-            @apply bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 transition-all duration-200 ease-in-out focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500;
-        }
-        .status-badge { padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase;}
+        .button-primary { @apply bg-indigo-600 hover:bg-indigo-700 text-white transition-all duration-200 ease-in-out focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500; }
+        .button-secondary { @apply bg-white border border-slate-300 text-slate-700 hover:bg-slate-50 transition-all duration-200 ease-in-out focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500; }
         .table-header { @apply bg-slate-50; }
         .table-cell-muted { @apply text-slate-500; }
         .table-row-hover:hover { @apply bg-slate-50; }
@@ -197,11 +165,11 @@
 
             <div id="view-manage" class="hidden card">
                  <h2 class="text-3xl font-bold text-slate-800 mb-2">Gerenciar Leads</h2>
-                 <p class="text-slate-500 mb-8">Visualize, filtre e gerencie seus leads. (Conteúdo a ser implementado nos próximos commits)</p>
+                 <p class="text-slate-500 mb-8">Visualize, filtre e gerencie seus leads.</p>
                  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                    <input id="filter-search" type="text" placeholder="Buscar por nome ou email..." class="form-input opacity-50" disabled>
-                    <select id="filter-status" class="form-input opacity-50" disabled><option value="">Todos os Status</option></select>
-                    <select id="filter-campaign" class="form-input opacity-50" disabled><option value="">Todas as Campanhas</option></select>
+                    <input id="filter-search" type="text" placeholder="Buscar por nome ou email..." class="form-input">
+                    <select id="filter-status" class="form-input"><option value="">Todos os Status</option></select>
+                    <select id="filter-campaign" class="form-input"><option value="">Todas as Campanhas</option></select>
                  </div>
                  <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-slate-200">
@@ -215,15 +183,14 @@
                             </tr>
                         </thead>
                         <tbody id="leads-table-body" class="bg-white divide-y divide-slate-200">
-                            <tr><td colspan="5" class="text-center py-8 text-slate-400">Tabela de leads aqui</td></tr>
-                        </tbody>
+                            </tbody>
                     </table>
                  </div>
             </div>
             
             <div id="view-upload" class="hidden card">
                 <h2 class="text-3xl font-bold text-slate-800 mb-2">Upload de Leads</h2>
-                <p class="text-slate-500 mb-8">Importe novos leads via arquivos CSV ou XLSX. (Conteúdo a ser implementado nos próximos commits)</p>
+                <p class="text-slate-500 mb-8">Importe novos leads via arquivos CSV ou XLSX. (Conteúdo a ser implementado no próximo commit)</p>
                  <div class="bg-white p-8 rounded-lg shadow-sm border border-slate-200 max-w-2xl mx-auto">
                     <div id="upload-area" class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-slate-300 border-dashed rounded-md">
                         <div class="space-y-1 text-center">
@@ -251,7 +218,7 @@
             <div class="p-6">
                 <div class="flex justify-between items-start">
                     <div>
-                        <h3 id="modal-lead-name" class="text-2xl font-bold text-slate-800">Detalhes do Lead</h3>
+                        <h3 id="modal-lead-name" class="text-2xl font-bold text-slate-800"></h3>
                         <p id="modal-lead-email" class="text-sm text-slate-500"></p>
                         <p id="modal-lead-phone" class="text-sm text-slate-500"></p>
                     </div>
@@ -260,15 +227,21 @@
                     </button>
                 </div>
                 <hr class="my-4 border-slate-200">
-                <div id="modal-body-content" class="text-slate-500">Carregando detalhes...</div>
-                 <div class="mt-6 hidden" id="modal-form-fields"> <label for="modal-lead-status" class="form-label">Alterar Status</label>
+                <div id="modal-body-details" class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mb-4">
+                    <div><p class="font-semibold text-slate-600">Campanha:</p><p id="modal-lead-campaign" class="text-slate-800"></p></div>
+                    <div><p class="font-semibold text-slate-600">Origem:</p><p id="modal-lead-source" class="text-slate-800"></p></div>
+                    <div><p class="font-semibold text-slate-600">Data de Criação:</p><p id="modal-lead-date" class="text-slate-800"></p></div>
+                </div>
+                 <div id="modal-form-fields">
+                    <label for="modal-lead-status" class="form-label">Alterar Status</label>
                     <select id="modal-lead-status" class="form-input mt-1"></select>
                     <label for="modal-lead-notes" class="form-label mt-4">Notas</label>
                     <textarea id="modal-lead-notes" rows="3" class="form-input mt-1 p-2"></textarea>
                 </div>
             </div>
             <div class="bg-slate-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse rounded-b-lg border-t border-slate-200">
-                <button id="modal-save" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 button-primary text-base font-medium sm:ml-3 sm:w-auto sm:text-sm hidden">Salvar</button> <button id="modal-cancel" type="button" class="mt-3 w-full inline-flex justify-center rounded-md shadow-sm px-4 py-2 button-secondary text-base font-medium sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Fechar</button>
+                <button id="modal-save" type="button" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 button-primary text-base font-medium sm:ml-3 sm:w-auto sm:text-sm">Salvar</button> 
+                <button id="modal-cancel" type="button" class="mt-3 w-full inline-flex justify-center rounded-md shadow-sm px-4 py-2 button-secondary text-base font-medium sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">Cancelar</button>
             </div>
         </div>
     </div>
@@ -446,11 +419,22 @@
                     if (navLinks[key]) navLinks[key].addEventListener('click', () => navigate(key));
                 });
 
-                const modalCloseBtn = document.getElementById('modal-close');
-                const modalCancelBtn = document.getElementById('modal-cancel');
-                if(modalCloseBtn) modalCloseBtn.addEventListener('click', closeModal);
-                if(modalCancelBtn) modalCancelBtn.addEventListener('click', closeModal);
+                const filterSearch = document.getElementById('filter-search');
+                const filterStatus = document.getElementById('filter-status');
+                const filterCampaign = document.getElementById('filter-campaign');
+
+                if(filterSearch) filterSearch.addEventListener('input', renderLeadsTable);
+                if(filterStatus) filterStatus.addEventListener('change', renderLeadsTable);
+                if(filterCampaign) filterCampaign.addEventListener('change', renderLeadsTable);
                 
+                document.getElementById('modal-close').addEventListener('click', closeModal);
+                document.getElementById('modal-cancel').addEventListener('click', closeModal);
+                document.getElementById('modal-save').addEventListener('click', saveLeadChanges);
+
+                document.getElementById('file-upload').addEventListener('change', handleFileSelect);
+                document.getElementById('process-upload').addEventListener('click', processUpload);
+                
+                populateFilters(); // Now this will be fully implemented
                 updateAllVisuals(); 
                 navigate('dashboard');
             };
@@ -477,8 +461,8 @@
             
             const updateAllVisuals = () => { 
                 updateKPIs(); 
-                createOrUpdateCharts(); // Now this will be implemented
-                // renderLeadsTable(); // Will be implemented in next commit
+                createOrUpdateCharts(); 
+                renderLeadsTable(); // Now this will be called
             };
 
             const updateKPIs = () => { 
@@ -558,28 +542,153 @@
                 });
             };
 
-            // Placeholder functions for later commits
-            const renderLeadsTable = () => { console.log("renderLeadsTable placeholder"); };
-            const populateFilters = () => { console.log("populateFilters placeholder"); };
-            const openModal = (leadId) => { 
-                if(leadModalEl) leadModalEl.classList.remove('hidden'); 
-                const modalBody = document.getElementById('modal-body-content');
-                const modalFormFields = document.getElementById('modal-form-fields');
-                const modalSaveBtn = document.getElementById('modal-save');
-                
-                if(modalBody) modalBody.textContent = `Detalhes do Lead ID: ${leadId} (Funcionalidade completa nos próximos commits)`;
-                if(modalFormFields) modalFormFields.classList.add('hidden'); 
-                if(modalSaveBtn) modalSaveBtn.classList.add('hidden');
+            const populateFilters = () => {
+                const statusFilterEl = document.getElementById('filter-status');
+                const campaignFilterEl = document.getElementById('filter-campaign');
+                const modalStatusSelectEl = document.getElementById('modal-lead-status');
+
+                // Populate Status Filters
+                if (statusFilterEl) {
+                    statusFilterEl.innerHTML = '<option value="">Todos os Status</option>'; // Reset
+                    leadStatuses.forEach(status => {
+                        const option = document.createElement('option');
+                        option.value = status;
+                        option.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+                        statusFilterEl.appendChild(option);
+                    });
+                }
+                if (modalStatusSelectEl) {
+                    modalStatusSelectEl.innerHTML = ''; // Reset
+                     leadStatuses.forEach(status => {
+                        const option = document.createElement('option');
+                        option.value = status;
+                        option.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+                        modalStatusSelectEl.appendChild(option);
+                    });
+                }
+
+                // Populate Campaign Filter
+                if (campaignFilterEl) {
+                    campaignFilterEl.innerHTML = '<option value="">Todas as Campanhas</option>'; // Reset
+                    const uniqueCampaigns = [...new Set(mockLeads.map(l => l.campaign_name))];
+                    uniqueCampaigns.sort().forEach(campaign => {
+                        if (campaign) { // Ensure campaign name is not null or empty
+                            const option = document.createElement('option');
+                            option.value = campaign;
+                            option.textContent = campaign;
+                            campaignFilterEl.appendChild(option);
+                        }
+                    });
+                }
+                 // Enable filter inputs now that they are populated
+                const filterSearchEl = document.getElementById('filter-search');
+                if(filterSearchEl) filterSearchEl.disabled = false;
+                if(statusFilterEl) statusFilterEl.disabled = false;
+                if(campaignFilterEl) campaignFilterEl.disabled = false;
+                if(filterSearchEl) filterSearchEl.classList.remove('opacity-50');
+                if(statusFilterEl) statusFilterEl.classList.remove('opacity-50');
+                if(campaignFilterEl) campaignFilterEl.classList.remove('opacity-50');
             };
-            const closeModal = () => { if(leadModalEl) leadModalEl.classList.add('hidden'); };
-            const saveLeadChanges = () => { closeModal(); };
+
+            const renderLeadsTable = () => {
+                const tableBody = document.getElementById('leads-table-body');
+                if (!tableBody) return;
+
+                const searchTerm = document.getElementById('filter-search').value.toLowerCase();
+                const statusFilter = document.getElementById('filter-status').value;
+                const campaignFilter = document.getElementById('filter-campaign').value;
+
+                const filteredLeads = mockLeads.filter(lead => {
+                    const nameMatch = lead.full_name ? lead.full_name.toLowerCase().includes(searchTerm) : false;
+                    const emailMatch = lead.email ? lead.email.toLowerCase().includes(searchTerm) : false;
+                    const matchesSearch = nameMatch || emailMatch;
+                    const matchesStatus = statusFilter ? lead.status === statusFilter : true;
+                    const matchesCampaign = campaignFilter ? lead.campaign_name === campaignFilter : true;
+                    return matchesSearch && matchesStatus && matchesCampaign;
+                });
+
+                tableBody.innerHTML = '';
+                if (filteredLeads.length === 0) {
+                    tableBody.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-slate-500">Nenhum lead encontrado com os filtros aplicados.</td></tr>`; 
+                    return;
+                }
+
+                filteredLeads.forEach(lead => {
+                    const row = document.createElement('tr');
+                    row.className = 'table-row-hover cursor-pointer';
+                    row.dataset.leadId = lead.id;
+                    row.innerHTML = `
+                        <td class="px-6 py-4 whitespace-nowrap"><div class="text-sm font-medium text-slate-900">${lead.full_name || 'N/A'}</div></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm table-cell-muted">${lead.email || 'N/A'}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm table-cell-muted">${lead.campaign_name || 'N/A'}</td>
+                        <td class="px-6 py-4 whitespace-nowrap"><span class="status-badge ${statusBackgrounds[lead.status] || 'bg-gray-100 text-gray-800'}">${lead.status || 'N/A'}</span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm table-cell-muted">${lead.created_time ? new Date(lead.created_time).toLocaleDateString('pt-BR') : 'N/A'}</td>
+                    `;
+                    row.addEventListener('click', () => openModal(lead.id));
+                    tableBody.appendChild(row);
+                });
+            };
+            
+            const openModal = (leadId) => {
+                const lead = mockLeads.find(l => l.id === leadId);
+                if (!lead || !leadModalEl) return;
+                currentLeadId = leadId;
+
+                document.getElementById('modal-lead-name').textContent = lead.full_name || 'Lead sem nome';
+                document.getElementById('modal-lead-email').textContent = lead.email || 'Email não informado';
+                document.getElementById('modal-lead-phone').textContent = lead.phone_number ? `Tel: ${lead.phone_number}` : 'Telefone não informado';
+                
+                const modalBodyDetails = document.getElementById('modal-body-details');
+                modalBodyDetails.innerHTML = `
+                    <div><p class="font-semibold text-slate-600">Campanha:</p><p id="modal-lead-campaign" class="text-slate-800">${lead.campaign_name || 'N/A'}</p></div>
+                    <div><p class="font-semibold text-slate-600">Origem:</p><p id="modal-lead-source" class="text-slate-800">${lead.source || 'N/A'}</p></div>
+                    <div><p class="font-semibold text-slate-600">Data de Criação:</p><p id="modal-lead-date" class="text-slate-800">${lead.created_time ? new Date(lead.created_time).toLocaleString('pt-BR') : 'N/A'}</p></div>
+                `;
+
+                document.getElementById('modal-lead-status').value = lead.status;
+                document.getElementById('modal-lead-notes').value = lead.notes || '';
+                
+                document.getElementById('modal-form-fields').classList.remove('hidden');
+                document.getElementById('modal-save').classList.remove('hidden');
+                document.getElementById('modal-cancel').textContent = 'Cancelar'; // Change from "Fechar" to "Cancelar"
+
+                leadModalEl.classList.remove('hidden');
+            };
+
+            const closeModal = () => { 
+                if(leadModalEl) leadModalEl.classList.add('hidden');
+                currentLeadId = null;
+                 // Reset modal button text if needed
+                const modalCancelBtn = document.getElementById('modal-cancel');
+                if(modalCancelBtn) modalCancelBtn.textContent = 'Fechar';
+            };
+
+            const saveLeadChanges = () => { 
+                if (currentLeadId === null) return;
+                const lead = mockLeads.find(l => l.id === currentLeadId);
+                if (lead) {
+                    lead.status = document.getElementById('modal-lead-status').value;
+                    lead.notes = document.getElementById('modal-lead-notes').value;
+                }
+                closeModal();
+                updateAllVisuals(); 
+            };
+
             const handleFileSelect = () => { 
                  const fileNameEl = document.getElementById('file-name');
-                 if (fileNameEl) fileNameEl.textContent = "Seleção de arquivo (funcionalidade em breve)";
+                 const fileUploadEl = document.getElementById('file-upload');
+                 const processBtn = document.getElementById('process-upload');
+                 if (fileNameEl && fileUploadEl.files.length > 0) {
+                    fileNameEl.textContent = `Arquivo selecionado: ${fileUploadEl.files[0].name}`;
+                    if(processBtn) processBtn.disabled = false;
+                 } else {
+                    if(fileNameEl) fileNameEl.textContent = "";
+                    if(processBtn) processBtn.disabled = true;
+                 }
             };
             const processUpload = () => { 
                 const feedbackEl = document.getElementById('upload-feedback');
-                if (feedbackEl) feedbackEl.innerHTML = `<p class="text-blue-600">Processamento simulado...</p>`;
+                if (feedbackEl) feedbackEl.innerHTML = `<p class="text-blue-600">Processando...</p>`;
                  setTimeout(() => {
                     if (feedbackEl) feedbackEl.innerHTML = `<p class="text-green-600">Upload simulado com sucesso!</p>`;
                 }, 1000);
