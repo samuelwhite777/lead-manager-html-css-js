@@ -190,8 +190,8 @@
             
             <div id="view-upload" class="hidden card">
                 <h2 class="text-3xl font-bold text-slate-800 mb-2">Upload de Leads</h2>
-                <p class="text-slate-500 mb-8">Importe novos leads via arquivos CSV ou XLSX. (Conteúdo a ser implementado no próximo commit)</p>
-                 <div class="bg-white p-8 rounded-lg shadow-sm border border-slate-200 max-w-2xl mx-auto">
+                <p class="text-slate-500 mb-8">Importe novos leads via arquivos CSV ou XLSX.</p>
+                <div class="bg-white p-8 rounded-lg shadow-sm border border-slate-200 max-w-2xl mx-auto">
                     <div id="upload-area" class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-slate-300 border-dashed rounded-md">
                         <div class="space-y-1 text-center">
                             <svg class="mx-auto h-12 w-12 text-slate-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true"><path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
@@ -434,7 +434,7 @@
                 document.getElementById('file-upload').addEventListener('change', handleFileSelect);
                 document.getElementById('process-upload').addEventListener('click', processUpload);
                 
-                populateFilters(); // Now this will be fully implemented
+                populateFilters(); 
                 updateAllVisuals(); 
                 navigate('dashboard');
             };
@@ -462,7 +462,7 @@
             const updateAllVisuals = () => { 
                 updateKPIs(); 
                 createOrUpdateCharts(); 
-                renderLeadsTable(); // Now this will be called
+                renderLeadsTable(); 
             };
 
             const updateKPIs = () => { 
@@ -547,9 +547,8 @@
                 const campaignFilterEl = document.getElementById('filter-campaign');
                 const modalStatusSelectEl = document.getElementById('modal-lead-status');
 
-                // Populate Status Filters
                 if (statusFilterEl) {
-                    statusFilterEl.innerHTML = '<option value="">Todos os Status</option>'; // Reset
+                    statusFilterEl.innerHTML = '<option value="">Todos os Status</option>'; 
                     leadStatuses.forEach(status => {
                         const option = document.createElement('option');
                         option.value = status;
@@ -558,7 +557,7 @@
                     });
                 }
                 if (modalStatusSelectEl) {
-                    modalStatusSelectEl.innerHTML = ''; // Reset
+                    modalStatusSelectEl.innerHTML = ''; 
                      leadStatuses.forEach(status => {
                         const option = document.createElement('option');
                         option.value = status;
@@ -567,12 +566,11 @@
                     });
                 }
 
-                // Populate Campaign Filter
                 if (campaignFilterEl) {
-                    campaignFilterEl.innerHTML = '<option value="">Todas as Campanhas</option>'; // Reset
+                    campaignFilterEl.innerHTML = '<option value="">Todas as Campanhas</option>'; 
                     const uniqueCampaigns = [...new Set(mockLeads.map(l => l.campaign_name))];
                     uniqueCampaigns.sort().forEach(campaign => {
-                        if (campaign) { // Ensure campaign name is not null or empty
+                        if (campaign) { 
                             const option = document.createElement('option');
                             option.value = campaign;
                             option.textContent = campaign;
@@ -580,7 +578,6 @@
                         }
                     });
                 }
-                 // Enable filter inputs now that they are populated
                 const filterSearchEl = document.getElementById('filter-search');
                 if(filterSearchEl) filterSearchEl.disabled = false;
                 if(statusFilterEl) statusFilterEl.disabled = false;
@@ -650,7 +647,7 @@
                 
                 document.getElementById('modal-form-fields').classList.remove('hidden');
                 document.getElementById('modal-save').classList.remove('hidden');
-                document.getElementById('modal-cancel').textContent = 'Cancelar'; // Change from "Fechar" to "Cancelar"
+                document.getElementById('modal-cancel').textContent = 'Cancelar';
 
                 leadModalEl.classList.remove('hidden');
             };
@@ -658,7 +655,6 @@
             const closeModal = () => { 
                 if(leadModalEl) leadModalEl.classList.add('hidden');
                 currentLeadId = null;
-                 // Reset modal button text if needed
                 const modalCancelBtn = document.getElementById('modal-cancel');
                 if(modalCancelBtn) modalCancelBtn.textContent = 'Fechar';
             };
