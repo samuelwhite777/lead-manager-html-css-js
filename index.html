@@ -23,8 +23,8 @@
         @media (min-width: 768px) { .chart-container { height: 320px; } }
         @media (min-width: 1024px) { .chart-container { height: 350px; } }
         
-        #app-header { height: 4.5rem; }
-        #main-content { padding-top: 4.5rem; }
+        #app-header { height: 4.5rem; /* 72px */ }
+        #main-content { padding-top: 4.5rem; /* Match header height */ }
 
         .nav-link {
             display: flex; align-items: center; padding: 0.5rem 0.75rem; border-radius: 0.375rem;
@@ -198,7 +198,7 @@
                             <div class="flex text-sm text-slate-600">
                                 <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-primary-accent hover:underline focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
                                     <span>Carregue um arquivo</span>
-                                    <input id="file-upload" name="file-upload" type="file" class="sr-only">
+                                    <input id="file-upload" name="file-upload" type="file" class="sr-only" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
                                 </label>
                                 <p class="pl-1">ou arraste e solte</p>
                             </div>
@@ -251,7 +251,9 @@
     </button>
 
     <script>
+        // Script executado quando o DOM está completamente carregado
         document.addEventListener('DOMContentLoaded', function () {
+            // Seleção de Elementos do DOM
             const authSectionEl = document.getElementById('auth-section');
             const loginViewEl = document.getElementById('view-login');
             const registerViewEl = document.getElementById('view-register');
@@ -262,7 +264,7 @@
             const iconMenuOpen = document.getElementById('icon-menu-open');
             const iconMenuClose = document.getElementById('icon-menu-close');
             const mobileMenuEl = document.getElementById('mobile-menu');
-            const mainNavEl = document.getElementById('main-nav');
+            const mainNavEl = document.getElementById('main-nav'); // Navegação principal (desktop)
 
             const loginFormEl = document.getElementById('login-form');
             const registerFormEl = document.getElementById('register-form');
@@ -274,6 +276,7 @@
             const showRegisterLink = document.getElementById('show-register-link');
             const showLoginLink = document.getElementById('show-login-link');
             
+            // Dados Mock (Simulação de um banco de dados)
             const mockLeads = [ 
                 { id: 1, facebook_lead_id: '1001', created_time: '2025-05-30T10:00:00Z', ad_name: 'Anúncio Lookalike', campaign_name: 'Campanha Verão 2025', form_name: 'Form Contato Rápido', full_name: 'Ana Silva', email: 'ana.silva@example.com', phone_number: '11987654321', status: 'novo', source: 'api_facebook', notes: '' },
                 { id: 2, facebook_lead_id: '1002', created_time: '2025-05-30T11:20:00Z', ad_name: 'Anúncio Remarketing', campaign_name: 'Campanha Inverno 2025', form_name: 'Form Baixar Ebook', full_name: 'Bruno Costa', email: 'bruno.costa@example.com', phone_number: '21912345678', status: 'contatado', source: 'api_facebook', notes: 'Ligação realizada.' },
@@ -282,22 +285,24 @@
                 { id: 5, facebook_lead_id: '1005', created_time: '2025-05-28T09:10:00Z', ad_name: 'Anúncio Remarketing', campaign_name: 'Campanha Inverno 2025', form_name: 'Form Baixar Ebook', full_name: 'Eduarda Fernandes', email: 'eduarda.f@example.com', phone_number: '51977776666', status: 'perdido', source: 'api_facebook', notes: 'Optou pelo concorrente.' },
             ];
             
+            // Estado da Aplicação
             let isMobileMenuOpen = false;
             let currentLeadId = null; 
             let statusChartInstance, campaignChartInstance; 
 
+            // Mapeamento das Views e Links de Navegação (para o modelo básico)
             const views = { 
                 dashboard: document.getElementById('view-dashboard'),
                 manage: document.getElementById('view-manage'),
                 upload: document.getElementById('view-upload'),
             };
-
             const navLinks = { 
                 dashboard: document.getElementById('nav-dashboard'),
                 manage: document.getElementById('nav-manage'),
                 upload: document.getElementById('nav-upload')
             };
             
+            // Constantes para Status dos Leads e Cores
             const leadStatuses = ['novo', 'contatado', 'qualificado', 'convertido', 'perdido'];
             const statusColors = { 
                 novo: '#3b82f6', contatado: '#f97316', qualificado: '#8b5cf6',
@@ -311,39 +316,55 @@
                 perdido: 'bg-red-100 text-red-800',
             };
             
+            /**
+             * Função principal de inicialização do sistema.
+             * Configura a visualização inicial (autenticação) e adiciona event listeners globais.
+             */
             const initializeSystem = () => {
-                appViewEl.classList.add('hidden');
-                authSectionEl.classList.remove('hidden');
-                showLoginView();
+                appViewEl.classList.add('hidden'); // Oculta a aplicação principal inicialmente
+                authSectionEl.classList.remove('hidden'); // Mostra a seção de autenticação
+                showLoginView(); // Exibe a tela de login por padrão
 
+                // Adiciona listeners para os formulários e links de autenticação
                 if (loginFormEl) loginFormEl.addEventListener('submit', handleLoginAttempt);
                 if (registerFormEl) registerFormEl.addEventListener('submit', handleRegisterAttempt);
                 if (showRegisterLink) showRegisterLink.addEventListener('click', (e) => { e.preventDefault(); showRegisterView(); });
                 if (showLoginLink) showLoginLink.addEventListener('click', (e) => { e.preventDefault(); showLoginView(); });
                 if (mobileMenuToggleBtn) mobileMenuToggleBtn.addEventListener('click', toggleMobileMenu);
                 
+                // Listener para o botão de suporte do WhatsApp
                 document.getElementById('whatsapp-support').addEventListener('click', openWhatsAppSupport);
                 
+                // Configurações padrão para Chart.js (tema claro)
                 if (Chart.defaults) { 
-                    Chart.defaults.color = '#475569'; 
-                    Chart.defaults.borderColor = 'rgba(203, 213, 225, 0.5)';
+                    Chart.defaults.color = '#475569'; // Cor do texto dos gráficos (slate-600)
+                    Chart.defaults.borderColor = 'rgba(203, 213, 225, 0.5)'; // Cor das grades (slate-300 com 50% opacidade)
                 }
-                populateMobileMenu();
+                populateMobileMenu(); // Popula o menu mobile com os links de navegação
             };
 
+            /**
+             * Exibe a tela de login e oculta a de cadastro.
+             */
             const showLoginView = () => {
                 loginViewEl.classList.remove('hidden');
                 registerViewEl.classList.add('hidden');
-                if (loginErrorMsgEl) loginErrorMsgEl.classList.add('hidden');
+                if (loginErrorMsgEl) loginErrorMsgEl.classList.add('hidden'); // Oculta mensagens de erro anteriores
             };
 
+            /**
+             * Exibe a tela de cadastro e oculta a de login.
+             */
             const showRegisterView = () => {
                 loginViewEl.classList.add('hidden');
                 registerViewEl.classList.remove('hidden');
-                if (registerErrorMsgEl) registerErrorMsgEl.classList.add('hidden');
-                if (registerSuccessMsgEl) registerSuccessMsgEl.classList.add('hidden');
+                if (registerErrorMsgEl) registerErrorMsgEl.classList.add('hidden'); // Oculta mensagens de erro anteriores
+                if (registerSuccessMsgEl) registerSuccessMsgEl.classList.add('hidden'); // Oculta mensagens de sucesso anteriores
             };
             
+            /**
+             * Alterna a visibilidade do menu mobile e dos ícones do botão.
+             */
             const toggleMobileMenu = () => {
                 isMobileMenuOpen = !isMobileMenuOpen;
                 mobileMenuEl.classList.toggle('hidden', !isMobileMenuOpen);
@@ -351,32 +372,41 @@
                 iconMenuClose.classList.toggle('hidden', !isMobileMenuOpen);
             };
 
+            /**
+             * Popula o menu mobile com os links da navegação principal (desktop).
+             */
             const populateMobileMenu = () => {
-                if (!mainNavEl || !mobileMenuEl) return;
-                mobileMenuEl.innerHTML = ''; 
+                if (!mainNavEl || !mobileMenuEl) return; // Garante que os elementos existem
+                mobileMenuEl.innerHTML = ''; // Limpa itens existentes para evitar duplicação
                 const desktopLinks = mainNavEl.querySelectorAll('a.nav-link'); 
                 desktopLinks.forEach(link => {
                     const navKey = link.id.replace('nav-', '');
+                    // Adiciona apenas links que correspondem a views definidas para o modelo básico
                     if (views[navKey]) {
-                        const mobileLink = link.cloneNode(true);
+                        const mobileLink = link.cloneNode(true); // Clona o link do desktop
                         mobileLink.addEventListener('click', () => {
-                            navigate(navKey); 
-                            if (isMobileMenuOpen) toggleMobileMenu(); 
+                            navigate(navKey); // Navega para a view correspondente
+                            if (isMobileMenuOpen) toggleMobileMenu(); // Fecha o menu mobile após o clique
                         });
                         mobileMenuEl.appendChild(mobileLink);
                     }
                 });
             };
 
+            /**
+             * Manipula a tentativa de login (simulado).
+             * @param {Event} event - O evento de submissão do formulário.
+             */
             const handleLoginAttempt = (event) => {
-                event.preventDefault();
+                event.preventDefault(); // Previne o comportamento padrão do formulário
                 const username = event.target.username.value;
                 const password = event.target.password.value;
+                // Simulação de autenticação
                 if (username === 'admin' && password === 'password') {
-                    authSectionEl.classList.add('hidden');
-                    appViewEl.classList.remove('hidden');
+                    authSectionEl.classList.add('hidden'); // Oculta a seção de autenticação
+                    appViewEl.classList.remove('hidden'); // Mostra a aplicação principal
                     if(loginErrorMsgEl) loginErrorMsgEl.classList.add('hidden');
-                    initializeAppLogic();
+                    initializeAppLogic(); // Inicializa a lógica da aplicação principal
                 } else {
                     if(loginErrorMsgEl) {
                         loginErrorMsgEl.textContent = 'Usuário ou senha inválidos.';
@@ -385,6 +415,10 @@
                 }
             };
 
+            /**
+             * Manipula a tentativa de cadastro (simulado).
+             * @param {Event} event - O evento de submissão do formulário.
+             */
             const handleRegisterAttempt = (event) => {
                 event.preventDefault();
                 const passwordInput = document.getElementById('reg-password');
@@ -406,19 +440,26 @@
                     return;
                 }
                 
+                // Simulação de cadastro bem-sucedido
                 if (registerSuccessMsgEl) {
                      registerSuccessMsgEl.textContent = 'Cadastro realizado com sucesso! (Simulado). Você pode fazer login agora.';
                      registerSuccessMsgEl.classList.remove('hidden');
                 }
-                if(registerFormEl) registerFormEl.reset();
-                setTimeout(() => { showLoginView(); }, 2500);
+                if(registerFormEl) registerFormEl.reset(); // Limpa o formulário
+                setTimeout(() => { showLoginView(); }, 2500); // Redireciona para login após um tempo
             };
             
+            /**
+             * Inicializa a lógica principal da aplicação após o login.
+             * Adiciona event listeners aos links de navegação e elementos interativos.
+             */
             const initializeAppLogic = () => {
+                // Adiciona listeners aos links de navegação do header
                 Object.keys(navLinks).forEach(key => { 
                     if (navLinks[key]) navLinks[key].addEventListener('click', () => navigate(key));
                 });
 
+                // Adiciona listeners aos filtros da tabela de gerenciamento
                 const filterSearch = document.getElementById('filter-search');
                 const filterStatus = document.getElementById('filter-status');
                 const filterCampaign = document.getElementById('filter-campaign');
@@ -427,29 +468,38 @@
                 if(filterStatus) filterStatus.addEventListener('change', renderLeadsTable);
                 if(filterCampaign) filterCampaign.addEventListener('change', renderLeadsTable);
                 
+                // Adiciona listeners aos botões do modal
                 document.getElementById('modal-close').addEventListener('click', closeModal);
                 document.getElementById('modal-cancel').addEventListener('click', closeModal);
                 document.getElementById('modal-save').addEventListener('click', saveLeadChanges);
 
+                // Adiciona listeners aos elementos de upload
                 document.getElementById('file-upload').addEventListener('change', handleFileSelect);
                 document.getElementById('process-upload').addEventListener('click', processUpload);
                 
-                populateFilters(); 
-                updateAllVisuals(); 
-                navigate('dashboard');
+                populateFilters(); // Popula os filtros com dados iniciais
+                updateAllVisuals(); // Renderiza todos os componentes visuais
+                navigate('dashboard'); // Navega para o dashboard por padrão
             };
 
+            /**
+             * Controla a navegação entre as diferentes views da aplicação.
+             * @param {string} viewName - O nome da view a ser exibida.
+             */
             const navigate = (viewName) => {
+                // Oculta todas as views
                 Object.values(views).forEach(v => { 
                     if (v && v.classList) v.classList.add('hidden');
                 });
+                // Exibe a view solicitada ou o dashboard como padrão
                 if(views[viewName] && views[viewName].classList) {
                      views[viewName].classList.remove('hidden');
                 } else if (views.dashboard) { 
                     views.dashboard.classList.remove('hidden');
-                    viewName = 'dashboard'; 
+                    viewName = 'dashboard'; // Garante que o estado ativo do link seja o dashboard
                 }
                 
+                // Atualiza o estado ativo dos links de navegação (desktop e mobile)
                 document.querySelectorAll('#main-nav .nav-link, #mobile-menu .nav-link').forEach(l => {
                     l.classList.remove('active');
                      const linkViewName = l.id.replace('nav-', '');
@@ -459,12 +509,18 @@
                 });
             };
             
+            /**
+             * Função agregadora para atualizar todos os componentes visuais que dependem de dados.
+             */
             const updateAllVisuals = () => { 
                 updateKPIs(); 
                 createOrUpdateCharts(); 
                 renderLeadsTable(); 
             };
 
+            /**
+             * Atualiza os Indicadores Chave de Performance (KPIs) no Dashboard.
+             */
             const updateKPIs = () => { 
                 const totalLeadsEl = document.getElementById('kpi-total-leads');
                 const newLeadsEl = document.getElementById('kpi-new-leads');
@@ -476,6 +532,9 @@
                 if(conversionRateEl) conversionRateEl.textContent = mockLeads.length > 0 ? `${((converted/mockLeads.length)*100).toFixed(1)}%` : '0%';
             };
             
+            /**
+             * Cria ou atualiza os gráficos (Leads por Status e Leads por Campanha) no Dashboard.
+             */
             const createOrUpdateCharts = () => {
                 const statusCtx = document.getElementById('statusChart').getContext('2d');
                 const campaignCtx = document.getElementById('campaignChart').getContext('2d');
@@ -483,20 +542,23 @@
                 const chartGridColor = 'rgba(203, 213, 225, 0.5)'; 
                 const doughnutBorderColor = '#ffffff'; 
 
-                Chart.defaults.color = chartTextColor;
+                Chart.defaults.color = chartTextColor; // Define a cor padrão do texto para os gráficos
                 
+                // Calcula a contagem de leads por status
                 const statusCounts = leadStatuses.reduce((acc, status) => {
                     acc[status] = mockLeads.filter(lead => lead.status === status).length; return acc;
                 }, {});
+                // Calcula a contagem de leads por campanha
                 const campaignData = mockLeads.reduce((acc, lead) => {
                     acc[lead.campaign_name] = (acc[lead.campaign_name] || 0) + 1; return acc;
                 }, {});
 
+                // Destrói instâncias anteriores dos gráficos para evitar sobreposição
                 if (statusChartInstance) statusChartInstance.destroy();
                 statusChartInstance = new Chart(statusCtx, {
                     type: 'doughnut',
                     data: { 
-                        labels: leadStatuses.map(s => s.charAt(0).toUpperCase() + s.slice(1)),
+                        labels: leadStatuses.map(s => s.charAt(0).toUpperCase() + s.slice(1)), // Formata os labels
                         datasets: [{ 
                             data: Object.values(statusCounts), 
                             backgroundColor: leadStatuses.map(s => statusColors[s]), 
@@ -524,7 +586,7 @@
                         datasets: [{ 
                             label: 'Nº de Leads', 
                             data: Object.values(campaignData), 
-                            backgroundColor: 'rgba(79, 70, 229, 0.7)', 
+                            backgroundColor: 'rgba(79, 70, 229, 0.7)', // Cor das barras
                             borderColor: 'rgba(79, 70, 229, 1)', 
                             borderWidth: 1, 
                             borderRadius: 4 
@@ -537,16 +599,20 @@
                             y: { beginAtZero: true, ticks: { color: chartTextColor }, grid: { color: chartGridColor, drawBorder: false} },
                             x: { ticks: { color: chartTextColor }, grid: { display: false, drawBorder: false} }
                         }, 
-                        plugins: { legend: { display: false } } 
+                        plugins: { legend: { display: false } } // Oculta a legenda para o gráfico de barras
                     }
                 });
             };
 
+            /**
+             * Popula os dropdowns de filtro (status e campanha) e o select de status no modal.
+             */
             const populateFilters = () => {
                 const statusFilterEl = document.getElementById('filter-status');
                 const campaignFilterEl = document.getElementById('filter-campaign');
                 const modalStatusSelectEl = document.getElementById('modal-lead-status');
 
+                // Popula filtro de status na tabela e no modal
                 if (statusFilterEl) {
                     statusFilterEl.innerHTML = '<option value="">Todos os Status</option>'; 
                     leadStatuses.forEach(status => {
@@ -566,9 +632,10 @@
                     });
                 }
 
+                // Popula filtro de campanha
                 if (campaignFilterEl) {
                     campaignFilterEl.innerHTML = '<option value="">Todas as Campanhas</option>'; 
-                    const uniqueCampaigns = [...new Set(mockLeads.map(l => l.campaign_name))];
+                    const uniqueCampaigns = [...new Set(mockLeads.map(l => l.campaign_name || "N/A"))]; // Inclui N/A se campanha for indefinida
                     uniqueCampaigns.sort().forEach(campaign => {
                         if (campaign) { 
                             const option = document.createElement('option');
@@ -578,6 +645,7 @@
                         }
                     });
                 }
+                // Habilita os inputs de filtro
                 const filterSearchEl = document.getElementById('filter-search');
                 if(filterSearchEl) filterSearchEl.disabled = false;
                 if(statusFilterEl) statusFilterEl.disabled = false;
@@ -587,14 +655,22 @@
                 if(campaignFilterEl) campaignFilterEl.classList.remove('opacity-50');
             };
 
+            /**
+             * Renderiza a tabela de leads com base nos filtros e termo de busca atuais.
+             */
             const renderLeadsTable = () => {
                 const tableBody = document.getElementById('leads-table-body');
                 if (!tableBody) return;
 
-                const searchTerm = document.getElementById('filter-search').value.toLowerCase();
-                const statusFilter = document.getElementById('filter-status').value;
-                const campaignFilter = document.getElementById('filter-campaign').value;
+                const filterSearchEl = document.getElementById('filter-search');
+                const filterStatusEl = document.getElementById('filter-status');
+                const filterCampaignEl = document.getElementById('filter-campaign');
 
+                const searchTerm = filterSearchEl ? filterSearchEl.value.toLowerCase() : "";
+                const statusFilter = filterStatusEl ? filterStatusEl.value : "";
+                const campaignFilter = filterCampaignEl ? filterCampaignEl.value : "";
+
+                // Filtra os leads
                 const filteredLeads = mockLeads.filter(lead => {
                     const nameMatch = lead.full_name ? lead.full_name.toLowerCase().includes(searchTerm) : false;
                     const emailMatch = lead.email ? lead.email.toLowerCase().includes(searchTerm) : false;
@@ -604,12 +680,13 @@
                     return matchesSearch && matchesStatus && matchesCampaign;
                 });
 
-                tableBody.innerHTML = '';
+                tableBody.innerHTML = ''; // Limpa a tabela antes de renderizar
                 if (filteredLeads.length === 0) {
                     tableBody.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-slate-500">Nenhum lead encontrado com os filtros aplicados.</td></tr>`; 
                     return;
                 }
 
+                // Cria e adiciona as linhas da tabela para cada lead filtrado
                 filteredLeads.forEach(lead => {
                     const row = document.createElement('tr');
                     row.className = 'table-row-hover cursor-pointer';
@@ -621,16 +698,21 @@
                         <td class="px-6 py-4 whitespace-nowrap"><span class="status-badge ${statusBackgrounds[lead.status] || 'bg-gray-100 text-gray-800'}">${lead.status || 'N/A'}</span></td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm table-cell-muted">${lead.created_time ? new Date(lead.created_time).toLocaleDateString('pt-BR') : 'N/A'}</td>
                     `;
-                    row.addEventListener('click', () => openModal(lead.id));
+                    row.addEventListener('click', () => openModal(lead.id)); // Abre o modal ao clicar na linha
                     tableBody.appendChild(row);
                 });
             };
             
+            /**
+             * Abre o modal de detalhes/edição do lead.
+             * @param {number} leadId - O ID do lead a ser exibido/editado.
+             */
             const openModal = (leadId) => {
                 const lead = mockLeads.find(l => l.id === leadId);
                 if (!lead || !leadModalEl) return;
-                currentLeadId = leadId;
+                currentLeadId = leadId; // Armazena o ID do lead atual para salvar alterações
 
+                // Popula os campos do modal com os dados do lead
                 document.getElementById('modal-lead-name').textContent = lead.full_name || 'Lead sem nome';
                 document.getElementById('modal-lead-email').textContent = lead.email || 'Email não informado';
                 document.getElementById('modal-lead-phone').textContent = lead.phone_number ? `Tel: ${lead.phone_number}` : 'Telefone não informado';
@@ -645,20 +727,27 @@
                 document.getElementById('modal-lead-status').value = lead.status;
                 document.getElementById('modal-lead-notes').value = lead.notes || '';
                 
+                // Exibe os campos de formulário e o botão de salvar
                 document.getElementById('modal-form-fields').classList.remove('hidden');
                 document.getElementById('modal-save').classList.remove('hidden');
-                document.getElementById('modal-cancel').textContent = 'Cancelar';
+                document.getElementById('modal-cancel').textContent = 'Cancelar'; // Muda o texto do botão
 
-                leadModalEl.classList.remove('hidden');
+                leadModalEl.classList.remove('hidden'); // Exibe o modal
             };
 
+            /**
+             * Fecha o modal de detalhes do lead.
+             */
             const closeModal = () => { 
                 if(leadModalEl) leadModalEl.classList.add('hidden');
-                currentLeadId = null;
+                currentLeadId = null; // Limpa o ID do lead atual
                 const modalCancelBtn = document.getElementById('modal-cancel');
-                if(modalCancelBtn) modalCancelBtn.textContent = 'Fechar';
+                if(modalCancelBtn) modalCancelBtn.textContent = 'Fechar'; // Restaura o texto do botão
             };
 
+            /**
+             * Salva as alterações feitas no modal para o lead correspondente.
+             */
             const saveLeadChanges = () => { 
                 if (currentLeadId === null) return;
                 const lead = mockLeads.find(l => l.id === currentLeadId);
@@ -667,35 +756,80 @@
                     lead.notes = document.getElementById('modal-lead-notes').value;
                 }
                 closeModal();
-                updateAllVisuals(); 
+                updateAllVisuals(); // Atualiza todas as visualizações para refletir as mudanças
             };
 
-            const handleFileSelect = () => { 
+            /**
+             * Manipula a seleção de arquivo no formulário de upload.
+             * @param {Event} event - O evento de mudança do input de arquivo.
+             */
+            const handleFileSelect = (event) => { 
                  const fileNameEl = document.getElementById('file-name');
                  const fileUploadEl = document.getElementById('file-upload');
                  const processBtn = document.getElementById('process-upload');
-                 if (fileNameEl && fileUploadEl.files.length > 0) {
-                    fileNameEl.textContent = `Arquivo selecionado: ${fileUploadEl.files[0].name}`;
-                    if(processBtn) processBtn.disabled = false;
+                 
+                 if (fileUploadEl.files && fileUploadEl.files.length > 0) {
+                    if(fileNameEl) fileNameEl.textContent = `Arquivo selecionado: ${fileUploadEl.files[0].name}`;
+                    if(processBtn) processBtn.disabled = false; // Habilita o botão de processar
                  } else {
                     if(fileNameEl) fileNameEl.textContent = "";
-                    if(processBtn) processBtn.disabled = true;
+                    if(processBtn) processBtn.disabled = true; // Desabilita se nenhum arquivo for selecionado
                  }
             };
+
+            /**
+             * Simula o processamento de um arquivo de upload e adiciona um novo lead.
+             */
             const processUpload = () => { 
                 const feedbackEl = document.getElementById('upload-feedback');
+                const fileNameEl = document.getElementById('file-name');
+                const processBtn = document.getElementById('process-upload');
+                const fileUploadEl = document.getElementById('file-upload');
+
                 if (feedbackEl) feedbackEl.innerHTML = `<p class="text-blue-600">Processando...</p>`;
-                 setTimeout(() => {
-                    if (feedbackEl) feedbackEl.innerHTML = `<p class="text-green-600">Upload simulado com sucesso!</p>`;
-                }, 1000);
+                
+                // Simula um atraso de processamento
+                setTimeout(() => {
+                    const newId = mockLeads.length > 0 ? Math.max(...mockLeads.map(l => l.id)) + 1 : 1;
+                    const newLeadName = `Lead de Upload ${newId}`;
+                    const uploadedFile = fileUploadEl.files[0]; // Pega o arquivo (se houver)
+                    const newLead = { 
+                        id: newId, 
+                        facebook_lead_id: `up-${newId}`, 
+                        created_time: new Date().toISOString(), 
+                        ad_name: 'Upload Manual', 
+                        campaign_name: 'Campanha de Upload', 
+                        form_name: uploadedFile ? uploadedFile.name : 'Arquivo Importado', 
+                        full_name: newLeadName, 
+                        email: `upload${newId}@example.com`, 
+                        phone_number: '00000000000', 
+                        status: 'novo', 
+                        source: uploadedFile ? (uploadedFile.name.endsWith('.csv') ? 'upload_csv' : 'upload_xlsx') : 'upload_manual', 
+                        notes: 'Lead adicionado via upload simulado.' 
+                    };
+                    mockLeads.push(newLead); // Adiciona o novo lead aos dados mock
+                    
+                    if (feedbackEl) feedbackEl.innerHTML = `<p class="text-green-600 font-semibold">Upload simulado com sucesso! Lead "${newLeadName}" adicionado.</p>`;
+                    
+                    // Limpa a interface de upload
+                    if(fileNameEl) fileNameEl.textContent = '';
+                    if(processBtn) processBtn.disabled = true;
+                    if(fileUploadEl) fileUploadEl.value = ''; 
+
+                    updateAllVisuals(); // Atualiza todas as visualizações
+                }, 1500);
             };
 
+            /**
+             * Abre uma janela de chat do WhatsApp para suporte.
+             */
             const openWhatsAppSupport = () => {
-                const phoneNumber = "5511999998888"; 
+                const phoneNumber = "5511999998888"; // Substitua pelo seu número de WhatsApp
                 const message = encodeURIComponent("Olá! Preciso de suporte com o sistema Lead Manager.");
                 window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
             };
 
+            // Inicializa o sistema quando o DOM está completamente carregado
             initializeSystem();
         });
     </script>
